@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, FormEvent, ChangeEvent } from 'react';
-import { FaSun, FaMoon, FaPaperPlane } from 'react-icons/fa';
+import { FaSun, FaMoon, FaPaperPlane, FaArrowLeft } from 'react-icons/fa';
 import Image from 'next/image';
 
 // Define interface for message structure
@@ -142,6 +142,33 @@ const Chatbot: React.FC = () => {
     }, 500);
     
     setShowOptions(false);
+  };
+
+  const handleChangeOption = () => {
+    // Add a message to indicate the change
+    addMessage('I want to change my option', 'user');
+    
+    // Reset all form states and data
+    setShowBusinessForm(false);
+    setShowJobForm(false);
+    setShowFeedbackForm(false);
+    setFormData({
+      email: '',
+      businessName: '',
+      businessOffer: '',
+      feedback: '',
+      jobRole: '',
+      jobInterest: '',
+      formType: ''
+    });
+    
+    // Show bot message and options again
+    setTimeout(() => {
+      addMessage('Sure, what would you like to do instead?', 'bot');
+      setTimeout(() => {
+        setShowOptions(true);
+      }, 1000);
+    }, 500);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -295,6 +322,19 @@ const Chatbot: React.FC = () => {
                 {option}
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Change Option Button - Shown when any form is displayed */}
+        {(showBusinessForm || showJobForm || showFeedbackForm) && (
+          <div className="mb-4">
+            <button
+              onClick={handleChangeOption}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${theme === 'light' ? 'bg-gray-200 hover:bg-gray-300 text-gray-700' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+            >
+              <FaArrowLeft />
+              <span>Change Option</span>
+            </button>
           </div>
         )}
 
